@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Temp Title</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <script src="index.js" charset="utf-8" defer></script>
+    </head>
+    <body>
+        <div class="bg">
+            <div class="prompt-entry" id="prompt-entry">
+                <h1>Enter a prompt:</h1>
+                <div class="prompt-input-element">
+                    <input type="text" name="prompt-text" id="prompt-text" class="prompt-input">
+                    <button type="button" class="submit-prompt" id="submit-prompt">Submit</button>
+                </div>
+                <p>Instructions Here</p>
+            </div>
+            <div class="prompt-draw" id="prompt-draw">
+                <h1>Your prompt is: A chef flipping pancakes while being chased by a chicken</h1>
+                <div class="drawing-element-container">
+                    <div class="left-section">
+                        <div class="drawing-tools">
+                            <button type="button" class="select-pen">Pen</button>
+                            <button type="button" class="select-eraser">Eraser</button>
+                            <button type="button" class="select-clear">Clear</button>
+
+                            <div class="select-colors">
+                                <button type="button" class="select-white"></button>
+                                <button type="button" class="select-black"></button>
+                                <button type="button" class="select-red"></button>
+                                <button type="button" class="select-blue"></button>
+                                <button type="button" class="select-green"></button>
+                                <button type="button" class="select-yellow"></button>
+                            </div>
+                            
+                        </div>
+                        <button type="button" class="submit-drawing" id="submit-drawing">Submit</button>
+                    </div>
+                    <div class="canvas-element">
+                        <canvas id="canvas">
+                            Your browser does not support the HTML canvas element.
+                        </canvas>
+                    </div>
+                    <p>Instructions Here</p>
+                </div>
+            </div>
+        </div>    
+    </body>
+</html>
