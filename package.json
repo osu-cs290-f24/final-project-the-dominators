@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
+    "handlebars": "^4.7.8",
+    "socket.io": "^4.8.1"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "prestart": "npm run build"
+  },
+  "name": "final-project-the-dominators",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osu-cs290-f24/final-project-the-dominators.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/osu-cs290-f24/final-project-the-dominators/issues"
+  },
+  "homepage": "https://github.com/osu-cs290-f24/final-project-the-dominators#readme",
+  "description": ""
+}

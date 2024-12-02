@@ -33,6 +33,36 @@ canvas.addEventListener("mousemove", draw)
 canvas.addEventListener("mouseup", stopDrawing)
 canvas.addEventListener("mouseout", stopDrawing)
 
+document.getElementById("white").addEventListener("click", function() {
+    context.strokeStyle = "white"
+    strokeWidth = 5
+})
+
+document.getElementById("black").addEventListener("click", function() {
+    context.strokeStyle = "black"
+    strokeWidth = 5
+})
+
+document.getElementById("red").addEventListener("click", function() {
+    context.strokeStyle = "red"
+    strokeWidth = 5
+})
+
+document.getElementById("blue").addEventListener("click", function() {
+    context.strokeStyle = "blue"
+    strokeWidth = 5
+})
+
+document.getElementById("green").addEventListener("click", function() {
+    context.strokeStyle = "green"
+    strokeWidth = 5
+})
+
+document.getElementById("yellow").addEventListener("click", function() {
+    context.strokeStyle = "yellow"
+    strokeWidth = 5
+})
+
 var canvasOffsetX = canvas.getBoundingClientRect().left
 var canvasOffsety = canvas.getBoundingClientRect().top
 
@@ -57,12 +87,19 @@ var strokeWidth = 5
 var startX
 var startY
 
-var clearButton = document.querySelector(".select-clear")
-clearButton.addEventListener("click", clearCanvas)
+document.getElementById("pen").addEventListener("click", function() {
+    context.strokeStyle = "black"
+    strokeWidth = 5
+})
 
-function clearCanvas(event) {
+document.getElementById("eraser").addEventListener("click", function() {
+    context.strokeStyle = "white"
+    strokeWidth = 15
+})
+
+document.querySelector(".select-clear").addEventListener("click", function() {
     context.clearRect(0,0,canvas.width, canvas.height)
-}
+})
 
 function startDrawing(event) {
     isDrawing = true
