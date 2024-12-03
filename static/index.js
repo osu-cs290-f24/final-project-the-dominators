@@ -1,10 +1,10 @@
 //Switch Screens
 function switchToDraw() {
-    window.location.href = '/draw';
+    window.location.href = "/draw"
 }
 
 function switchToPrompt() {
-    window.location.href = '/write';
+    window.location.href = "/write"
 }
 
 //Color Swap
