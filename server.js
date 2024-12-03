@@ -16,9 +16,14 @@ app.set("view engine", "handlebars")
 
 app.use(express.static('static'))
 
+app.get('/write', function (req, res) {
+    res.render("writePrompt")
+})
+
 app.get('/draw', function (req, res) {
     res.render("drawPrompt")
 })
+
 
 app.listen(port, function () {
     console.log("== Server is listening on port", port)

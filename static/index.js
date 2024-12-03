@@ -1,28 +1,23 @@
 //Switch Screens
-var submitPromptButton = document.getElementById("submit-prompt")
-submitPromptButton.addEventListener("click", switchToDraw)
-
-var submitDrawingButton = document.getElementById("submit-drawing")
-submitDrawingButton.addEventListener("click", switchToPrompt)
-
-var prompt = document.querySelectorAll(".prompt-entry")
-var drawWindow = document.querySelectorAll(".prompt-draw")
-
 function switchToDraw() {
-    prompt[0].style.display = "none"
-    drawWindow[0].style.display = "block"
+    window.location.href = '/draw';
 }
 
 function switchToPrompt() {
-    drawWindow[0].style.display = "none"
-    prompt[0].style.display = "flex"
+    window.location.href = '/write';
 }
 
 //Color Swap
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", () => {
     var randomDegree = Math.floor(Math.random() * 360)
     document.querySelector('.bg').style.setProperty('--hue-rotate', randomDegree + 'deg')
-};
+    
+    var submitPromptButton = document.getElementById("submit-prompt")
+    if (submitPromptButton) submitPromptButton.addEventListener("click", switchToDraw)
+
+    var submitDrawingButton = document.getElementById("submit-drawing")
+    if (submitDrawingButton) submitDrawingButton.addEventListener("click", switchToPrompt)
+  });
 
 //Canvas
 var canvas = document.getElementById("canvas")
