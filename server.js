@@ -7,7 +7,7 @@ var { Server } = require("socket.io")
 var app = express()
 var server = http.createServer(app)
 var io = new Server(server)
-var port = process.env.PORT || 3002
+var port = process.env.PORT || 3000
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
