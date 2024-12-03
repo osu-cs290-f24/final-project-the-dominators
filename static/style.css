@@ -34,6 +34,31 @@ h1, p, button, input {
     color: black;
 }
 
+h2 {
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-size: 150px;
+    font-style: normal;
+    color: black;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+h3 {
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-size: 80px;
+    font-style: normal;
+    color: black;
+    text-align: center;
+    margin-top: 0;
+}
+
+.error-container {
+    margin: auto;
+    width: 600px;
+}
+
 .prompt-entry {
     display: flex;
     flex-direction: column;
