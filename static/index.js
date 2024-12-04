@@ -4,21 +4,21 @@ function switchToDraw() {
 }
 
 function switchToPrompt() {
-    endGame(); 
+    endGame() 
     window.location.href = "/write"
 }
 
 //Color Swap
 document.addEventListener("DOMContentLoaded", () => {
     var randomDegree = Math.floor(Math.random() * 360)
-    document.querySelector('.bg').style.setProperty('--hue-rotate', randomDegree + 'deg')
+    document.querySelector(".bg").style.setProperty("--hue-rotate", randomDegree + "deg")
 
     var submitPromptButton = document.getElementById("submit-prompt")
     if (submitPromptButton) submitPromptButton.addEventListener("click", sendInput)
 
     var submitDrawingButton = document.getElementById("submit-drawing")
     if (submitDrawingButton) submitDrawingButton.addEventListener("click", switchToPrompt)
-  });
+  })
 
 //Canvas
 var canvas = document.getElementById("canvas")
@@ -133,51 +133,51 @@ if (canvas) {
 }
 
 //Send and Receive data
-console.log('Attempting to connect to the server...');
-const socket = io();
-var playerSocketId;
+console.log("Attempting to connect to the server...")
+const socket = io()
+var playerSocketId
 
-socket.on('connect', () => {
-    console.log('Connected to server with ID:', socket.id);
+socket.on("connect", () => {
+    console.log("Connected to server with ID:", socket.id)
 
-    if (!localStorage.hasOwnProperty('socketId')){
-        localStorage.setItem('socketId', socket.id);
-        socket.emit('playerConnected', {socketId: socket.id});
+    if (!localStorage.hasOwnProperty("socketId")){
+        localStorage.setItem("socketId", socket.id)
+        socket.emit("playerConnected", {socketId: socket.id})
     } 
 
-    playerSocketId = localStorage.getItem('socketId');
-    console.log('Player socket ID from localStorage:', playerSocketId);
-    trackPlayer();
+    playerSocketId = localStorage.getItem("socketId")
+    console.log("Player socket ID from localStorage:", playerSocketId)
+    trackPlayer()
 
-});
+})
 
 
 function sendInput(event) {
-    event.preventDefault();
-    var userInput = document.getElementById("prompt-text").value;
+    event.preventDefault()
+    var userInput = document.getElementById("prompt-text").value
 
     // Send input to the server
-    socket.emit("sendInput", userInput);
+    socket.emit("sendInput", userInput)
 
     // Clear the input field
-    document.getElementById("prompt-text").value = "";
+    document.getElementById("prompt-text").value = ""
 
-    window.location.href = '/draw';
+    window.location.href = "/draw"
 }
 
-socket.on('receiveInput', (data) => {
-    const promptElement = document.getElementById("prompt");
+socket.on("receiveInput", (data) => {
+    const promptElement = document.getElementById("prompt")
     if (promptElement) {
-        promptElement.textContent = data; // Update the displayed prompt
+        promptElement.textContent = data // Update the displayed prompt
     }
-});
+})
 
 function trackPlayer(){
-    socket.emit('whichPlayer', {socketId: playerSocketId})
+    socket.emit("whichPlayer", {socketId: playerSocketId})
 }
 
 function endGame() {
-    console.log("== Game Over");
-    localStorage.removeItem('socketId');
-    socket.emit('endGame', {socketId: playerSocketId});
+    console.log("== Game Over")
+    localStorage.removeItem("socketId")
+    socket.emit("endGame", {socketId: playerSocketId})
 }
