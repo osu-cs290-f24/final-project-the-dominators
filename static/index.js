@@ -4,6 +4,7 @@ function switchToDraw() {
 }
 
 function switchToPrompt() {
+    endGame(); 
     window.location.href = "/write"
 }
 
@@ -134,9 +135,20 @@ if (canvas) {
 //Send and Receive data
 console.log('Attempting to connect to the server...');
 const socket = io();
+var playerSocketId;
 
 socket.on('connect', () => {
     console.log('Connected to server with ID:', socket.id);
+
+    if (!localStorage.hasOwnProperty('socketId')){
+        localStorage.setItem('socketId', socket.id);
+        socket.emit('playerConnected', {socketId: socket.id});
+    } 
+
+    playerSocketId = localStorage.getItem('socketId');
+    console.log('Player socket ID from localStorage:', playerSocketId);
+    trackPlayer();
+
 });
 
 
@@ -159,3 +171,13 @@ socket.on('receiveInput', (data) => {
         promptElement.textContent = data; // Update the displayed prompt
     }
 });
+
+function trackPlayer(){
+    socket.emit('whichPlayer', {socketId: playerSocketId})
+}
+
+function endGame() {
+    console.log("== Game Over");
+    localStorage.removeItem('socketId');
+    socket.emit('endGame', {socketId: playerSocketId});
+}

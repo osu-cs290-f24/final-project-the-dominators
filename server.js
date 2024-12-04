@@ -7,7 +7,7 @@ var { Server } = require("socket.io")
 var app = express()
 var server = http.createServer(app)
 var io = new Server(server)
-var port = process.env.PORT || 3000
+var port = process.env.PORT || 3522
 
 var promptToDraw = "Default Prompt"
 
@@ -37,7 +37,18 @@ app.get('*', function (req, res) {
 // })
 
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+    console.log('Server-side socket ID connected:', socket.id);
+
+    //Listen for playerConnected from client containing locally stored playerID
+    socket.on('playerConnected', (data) => {
+        console.log('  -- NewPlayer:', data.socketId);
+    });
+    socket.on('whichPlayer', (data) => {
+        console.log('  -- Player socket ID from client:', data.socketId);
+    })
+    socket.on('endGame', (data) => {
+        console.log('  -- Game ended. Player disconnected: ', data.socketId);
+    })
 
     // Listen for text input from the client
     socket.on('sendInput', (data) => {
@@ -51,7 +62,8 @@ io.on('connection', (socket) => {
 
     // Handle disconnect
     socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
+        console.log('Server-side socket ID disconnected:', socket.id);
+        console.log('');
     });
 });
 
