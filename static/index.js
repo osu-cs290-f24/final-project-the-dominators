@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (submitPromptButton) submitPromptButton.addEventListener("click", sendInput)
 
     var submitDrawingButton = document.getElementById("submit-drawing")
-    if (submitDrawingButton) submitDrawingButton.addEventListener("click", switchToPrompt)
+    if (submitDrawingButton) submitDrawingButton.addEventListener("click", storeCanvasData)
   })
 
 //Canvas
@@ -151,11 +151,10 @@ socket.on("connect", () => {
 
 })
 
-
 function sendInput(event) {
     event.preventDefault()
     var userInput = document.getElementById("prompt-text").value
-
+    if(userInput){
     // Send input to the server
     socket.emit("sendInput", userInput)
 
@@ -163,6 +162,11 @@ function sendInput(event) {
     document.getElementById("prompt-text").value = ""
 
     window.location.href = "/draw"
+    }
+    else{
+        alert("You have not provided a valid prompt.")
+        return
+    }
 }
 
 socket.on("receiveInput", (data) => {
@@ -180,4 +184,38 @@ function endGame() {
     console.log("== Game Over")
     localStorage.removeItem("socketId")
     socket.emit("endGame", {socketId: playerSocketId})
+}
+
+function storeCanvasData(){
+    if(!canvas){
+        console.error("No Canvas")
+        return
+    }
+    var canvasData = canvas.toDataURL("image/png")
+
+    localStorage.setItem("canvasData", canvasData)
+    console.log("Canvas Data was Locally Stored")
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+    const submitCanvasButton = document.getElementById("submit-drawing")
+    if(submitCanvasButton){
+        submitCanvasButton.addEventListener("click", storeCanvasData)
+    }
+})
+
+function readCanvasData(){
+    var localCanvas = localStorage.getItem("canvasData")
+    if(localCanvas){
+        const img = new Image()
+        img.src = localCanvas
+
+        img.onload = function(){
+            context.clearRect(0,0,canvas.width,canvas.height)
+            context.drawImage(img, 0, 0)
+        }
+    }
+    else{
+        console.log("No canvas found")
+    }
 }
