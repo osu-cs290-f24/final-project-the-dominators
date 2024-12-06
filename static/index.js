@@ -195,6 +195,15 @@ socket.on("receiveIndex", (data) => {
     }
 })
 
+socket.on("nextScreen", (data) => {
+    if(data == "prompt"){
+        switchToPrompt()
+    }
+    else{
+        switchToDraw()
+    }
+})
+
 function trackPlayer(){
     socket.emit("whichPlayer", {socketId: playerSocketId})
 }
@@ -211,8 +220,6 @@ function getCanvasData(){
     socket.emit('canvasUpdate', {idx: index, canvasData: canvasData})
     var waitScreen = document.getElementById("wait-screen")
     waitScreen.style.display = "flex"
-
-    //wait()
-
-    switchToPrompt()
 }
+
+

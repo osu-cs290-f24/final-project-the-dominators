@@ -13,6 +13,7 @@ var promptToDraw = "Default Prompt"
 
 var gameData = []
 var players = []
+var playerCtr = 0
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
@@ -89,6 +90,10 @@ io.on("connection", (socket) => {
 
     socket.on("canvasUpdate", (data) => {
         gameData[data.idx] = data.canvasData
+        playerCtr++
+        if(playerCtr == players.length){
+            io.emit("nextScreen", "prompt")
+        }
     })
 
     // Listen for text input from the client
