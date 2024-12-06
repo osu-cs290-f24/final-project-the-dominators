@@ -1,5 +1,9 @@
 <div class="prompt-entry" id="prompt-entry">
-    <h3>Enter a prompt:</h3>
+    {{#if firstPost}}
+        <h3>Enter a prompt:</h3>
+    {{else}}
+        <h3>Describe the image:</h3>
+    {{/if}}
     <div class="prompt-input-element">
         <input type="text" name="prompt-text" id="prompt-text" class="prompt-input">
         <button type="button" class="submit-prompt" id="submit-prompt">Submit</button>
