@@ -14,6 +14,7 @@ var promptToDraw = "Default Prompt"
 var gameData = []
 var players = []
 var playerCtr = 0
+var round = 0
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
@@ -31,10 +32,11 @@ app.get("/lobby", function(req, res){
 })
 
 app.get("/write", function (req, res) {
-    var idx = req.query.idx
-    if(gameData[idx]){
+    var idx = parseInt(req.query.idx)
+    console.log("CURRENT ROUND:", round)
+    if(gameData[idx + ((round - 1) * players.length)]){
        res.render("writePrompt", {
-            imgURL: gameData[idx], // give the player who is requesting the page the data of the next player index
+            imgURL: gameData[idx + ((round - 1) * players.length)],
             firstPost: false 
         }) 
     }
@@ -89,11 +91,12 @@ io.on("connection", (socket) => {
     })
 
     socket.on("canvasUpdate", (data) => {
-        gameData[data.idx] = data.canvasData
+        gameData[data.idx + (round * players.length)] = data.canvasData
         playerCtr++
         if(playerCtr == players.length){
             io.emit("nextScreen", "prompt")
             playerCtr = 0
+            round++
         }
     })
 
