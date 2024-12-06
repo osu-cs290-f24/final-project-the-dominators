@@ -173,8 +173,10 @@ function sendInput(event) {
 
     // Clear the input field
     document.getElementById("prompt-text").value = ""
-
-    window.location.href = "/draw"
+    
+    var waitScreen = document.getElementById("wait-screen")
+    waitScreen.style.display = "flex"
+    // window.location.href = "/draw"
     }
     else{
         alert("You have not provided a valid prompt.")

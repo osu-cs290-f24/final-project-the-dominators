@@ -93,6 +93,7 @@ io.on("connection", (socket) => {
         playerCtr++
         if(playerCtr == players.length){
             io.emit("nextScreen", "prompt")
+            playerCtr = 0
         }
     })
 
@@ -101,6 +102,12 @@ io.on("connection", (socket) => {
         console.log("Received input:", data)
 
         promptToDraw = data
+
+        playerCtr++
+        if(playerCtr == players.length){
+            io.emit("nextScreen", "draw")
+            playerCtr = 0
+        }
 
         // Broadcast the data to all connected clients
         io.emit("receiveInput", data)
