@@ -8,7 +8,16 @@
         <input type="text" name="prompt-text" id="prompt-text" class="prompt-input">
         <button type="button" class="submit-prompt" id="submit-prompt">Submit</button>
     </div>
-    <img src="{{imgURL}}">
+    
+    {{#if firstPost}}
+        <h1>Instructions:</h1>
+        <p>Think of something fun, unique, or interesting for the next player to draw.</p>
+        <p>Type your idea in the box provided.</p>
+        <p>Be as descriptive or specific as you like, but keep it short and sweet</p>
+        <p>Examples: 'A dragon flying over a castle' or 'A cat wearing sunglasses.'</p>
+    {{else}}
+        <img src="{{imgURL}}">
+    {{/if}}
 </div>
 
 <div class="wait-screen" id="wait-screen">

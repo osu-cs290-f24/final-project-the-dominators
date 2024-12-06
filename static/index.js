@@ -6,7 +6,6 @@ function switchToDraw() {
 var index
 
 function switchToPrompt() {
-    //endGame() 
     window.location.href = `/write?idx=${encodeURIComponent(index)}`
 }
 
@@ -15,8 +14,8 @@ function switchToLobby(){
     localStorage.removeItem("socketId")
 }
 
-//Color Swap
 document.addEventListener("DOMContentLoaded", () => {
+    //Color Swap
     var randomDegree = Math.floor(Math.random() * 360)
     document.querySelector(".bg").style.setProperty("--hue-rotate", randomDegree + "deg")
 
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (playButton) playButton.addEventListener("click", switchToLobby)
 
     var startButton = document.getElementById("start-game-button")
-    if (startButton) startButton.addEventListener("click", switchToPrompt)
+    if (startButton) startButton.addEventListener("click", () => startGame())
 
     var submitPromptButton = document.getElementById("submit-prompt")
     if (submitPromptButton) submitPromptButton.addEventListener("click", sendInput)
@@ -164,6 +163,18 @@ socket.on("connect", () => {
 
 })
 
+function startGame() {
+    socket.emit("startButtonPressed")
+}
+
+socket.on("startGame", data => {
+    if (data == "err") {
+        alert("Game already in session")
+    } else {
+        switchToPrompt()
+    }
+})
+
 function sendInput(event) {
     event.preventDefault()
     var userInput = document.getElementById("prompt-text").value
@@ -179,8 +190,7 @@ function sendInput(event) {
     // window.location.href = "/draw"
     }
     else{
-        alert("You have not provided a valid prompt.")
-        return
+        
     }
 }
 
@@ -199,21 +209,26 @@ socket.on("receiveIndex", (data) => {
 
 socket.on("updatePlayers", (data) => {
     var playerCounter = document.getElementById("counter")
-    playerCounter.textContent = data + " Players Connected"
+    if (playerCounter) playerCounter.textContent = data + " Players Connected"
 })
 
 socket.on("nextScreen", (data) => {
     if(data == "prompt"){
         switchToPrompt()
-    }
-    else{
+    } else if (data == "draw") {
         switchToDraw()
+    } else {
+        switchToLobby()
     }
 })
 
 function trackPlayer(){
     socket.emit("whichPlayer", {socketId: playerSocketId})
 }
+
+socket.on("endGame", (data) => {
+    endGame()
+})
 
 function endGame() {
     console.log("== Game Over")

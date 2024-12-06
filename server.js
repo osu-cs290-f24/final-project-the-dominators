@@ -16,6 +16,7 @@ var players = []
 var playerCtr = 0
 var round = 0
 var playerCount = 0
+var gameInSession = false
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
@@ -88,8 +89,12 @@ io.on("connection", (socket) => {
         io.emit("receiveIndex", {socketId: data.socketId, idx:index})
     })
 
-    socket.on("endGame", (data) => {
-        console.log("  -- Game ended. Player disconnected: ", data.socketId)
+    socket.on("startButtonPressed", (data) => {
+        if (!gameInSession) {
+            io.emit("startGame")
+        } else {
+            
+        }
     })
 
     socket.on("canvasUpdate", (data) => {
@@ -110,7 +115,13 @@ io.on("connection", (socket) => {
 
         playerCtr++
         if(playerCtr == players.length){
-            io.emit("nextScreen", "draw")
+            if (round == players.length - 1) {
+                //  End game
+                socket.emit("endGame")
+                io.emit("nextScreen", "gameEnd")
+            } else {
+                io.emit("nextScreen", "draw")
+            }
             playerCtr = 0
         }
 
