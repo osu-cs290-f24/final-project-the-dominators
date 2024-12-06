@@ -11,6 +11,8 @@ var port = process.env.PORT || 3522
 
 var promptToDraw = "Default Prompt"
 
+var gameData = []
+
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
 }))
@@ -27,7 +29,18 @@ app.get("/lobby", function(req, res){
 })
 
 app.get("/write", function (req, res) {
-    res.render("writePrompt")
+    if(gameData[0]){
+       res.render("writePrompt", {
+            imgURL: gameData[0].canvasData
+            firstPost: false 
+        }) 
+    }
+    else{
+        res.render("writePrompt", {
+            imgURL: ""
+            firstPost: true 
+        }) 
+    }
 })
 
 app.get("/draw", function (req, res) {
@@ -56,6 +69,10 @@ io.on("connection", (socket) => {
     })
     socket.on("endGame", (data) => {
         console.log("  -- Game ended. Player disconnected: ", data.socketId)
+    })
+    socket.on("canvasUpdate", (data) => {
+        console.log("  -- Canvas data and ID pushed to array: ", data.socketId, data.canvasData)
+        gameData.push(data)
     })
 
     // Listen for text input from the client

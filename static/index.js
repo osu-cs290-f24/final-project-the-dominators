@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (submitPromptButton) submitPromptButton.addEventListener("click", sendInput)
 
     var submitDrawingButton = document.getElementById("submit-drawing")
-    if (submitDrawingButton) submitDrawingButton.addEventListener("click", storeCanvasData)
+    if (submitDrawingButton) submitDrawingButton.addEventListener("click", getCanvasData)
   })
 
 //Canvas
@@ -186,36 +186,10 @@ function endGame() {
     socket.emit("endGame", {socketId: playerSocketId})
 }
 
-function storeCanvasData(){
-    if(!canvas){
-        console.error("No Canvas")
-        return
-    }
+function getCanvasData(){
+    console.log("Retrieved Canvas Data")
     var canvasData = canvas.toDataURL("image/png")
-
-    localStorage.setItem("canvasData", canvasData)
-    console.log("Canvas Data was Locally Stored")
-}
-
-document.addEventListener("DOMContentLoaded", function(){
-    const submitCanvasButton = document.getElementById("submit-drawing")
-    if(submitCanvasButton){
-        submitCanvasButton.addEventListener("click", storeCanvasData)
-    }
-})
-
-function readCanvasData(){
-    var localCanvas = localStorage.getItem("canvasData")
-    if(localCanvas){
-        const img = new Image()
-        img.src = localCanvas
-
-        img.onload = function(){
-            context.clearRect(0,0,canvas.width,canvas.height)
-            context.drawImage(img, 0, 0)
-        }
-    }
-    else{
-        console.log("No canvas found")
-    }
+    socket.emit('canvasUpdate', {socketId: playerSocketId, canvasData: canvasData})
+    var waitScreen = document.getElementById("wait-screen")
+    waitScreen.style.display = "flex"
 }
