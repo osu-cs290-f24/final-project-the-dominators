@@ -3,13 +3,16 @@ function switchToDraw() {
     window.location.href = "/draw"
 }
 
+var index
+
 function switchToPrompt() {
-    // endGame() 
-    window.location.href = "/write"
+    //endGame() 
+    window.location.href = `/write?idx=${encodeURIComponent(index)}`
 }
 
 function switchToLobby(){
     window.location.href = "/lobby"
+    localStorage.removeItem("socketId")
 }
 
 //Color Swap
@@ -184,6 +187,10 @@ socket.on("receiveInput", (data) => {
     if (promptElement) {
         promptElement.textContent = data // Update the displayed prompt
     }
+})
+
+socket.on("receiveIndex", (data) => {
+    index = data
 })
 
 function trackPlayer(){

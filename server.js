@@ -30,9 +30,10 @@ app.get("/lobby", function(req, res){
 })
 
 app.get("/write", function (req, res) {
-    if(gameData[0]){
+    var idx = req.query.idx
+    if(gameData[idx]){
        res.render("writePrompt", {
-            imgURL: gameData[gameData.length - 1].canvasData,
+            imgURL: gameData[idx].canvasData, // give the player who is requesting the page the data of the next player index
             firstPost: false 
         }) 
     }
@@ -68,6 +69,18 @@ io.on("connection", (socket) => {
     })
     socket.on("whichPlayer", (data) => {
         console.log("  -- Player socket ID from client:", data.socketId)
+
+        var index
+
+        for (var i = 0; i < players.length; i++) {
+            if (data.socketId == players[i]) {
+                index = i
+                console.log("FOUND PLAYER")
+                break
+            }
+        }
+
+        io.emit("receiveIndex", index)
     })
     socket.on("endGame", (data) => {
         console.log("  -- Game ended. Player disconnected: ", data.socketId)
