@@ -7,7 +7,7 @@ var { Server } = require("socket.io")
 var app = express()
 var server = http.createServer(app)
 var io = new Server(server)
-var port = process.env.PORT || 3522
+var PORT = process.env.PORT || 3522
 
 var promptToDraw = "Default Prompt"
 
@@ -127,6 +127,6 @@ io.on("connection", (socket) => {
     })
 })
 
-server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`)
+server.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`)
 })
