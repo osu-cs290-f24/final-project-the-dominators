@@ -7,6 +7,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "build": "echo 'No build step required for backend only' && exit 0",
     "prestart": "npm run build"
   },
   "name": "final-project-the-dominators",
