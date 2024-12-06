@@ -12,6 +12,7 @@ var port = process.env.PORT || 3522
 var promptToDraw = "Default Prompt"
 
 var gameData = []
+var players = []
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
@@ -63,6 +64,7 @@ io.on("connection", (socket) => {
     //Listen for playerConnected from client containing locally stored playerID
     socket.on("playerConnected", (data) => {
         console.log("  -- NewPlayer:", data.socketId)
+        players.push(data.socketId)
     })
     socket.on("whichPlayer", (data) => {
         console.log("  -- Player socket ID from client:", data.socketId)

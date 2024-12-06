@@ -4,14 +4,24 @@ function switchToDraw() {
 }
 
 function switchToPrompt() {
-    endGame() 
+    // endGame() 
     window.location.href = "/write"
+}
+
+function switchToLobby(){
+    window.location.href = "/lobby"
 }
 
 //Color Swap
 document.addEventListener("DOMContentLoaded", () => {
     var randomDegree = Math.floor(Math.random() * 360)
     document.querySelector(".bg").style.setProperty("--hue-rotate", randomDegree + "deg")
+
+    var playButton = document.getElementById("play-button")
+    if (playButton) playButton.addEventListener("click", switchToLobby)
+
+    var startButton = document.getElementById("start-game-button")
+    if (startButton) startButton.addEventListener("click", switchToPrompt)
 
     var submitPromptButton = document.getElementById("submit-prompt")
     if (submitPromptButton) submitPromptButton.addEventListener("click", sendInput)
@@ -192,4 +202,8 @@ function getCanvasData(){
     socket.emit('canvasUpdate', {socketId: playerSocketId, canvasData: canvasData})
     var waitScreen = document.getElementById("wait-screen")
     waitScreen.style.display = "flex"
+
+    //wait()
+
+    switchToPrompt()
 }
