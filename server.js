@@ -15,6 +15,7 @@ var gameData = []
 var players = []
 var playerCtr = 0
 var round = 0
+var playerCount = 0
 
 app.engine("handlebars", exphbs.engine({
     defaultLayout: "main"
@@ -64,11 +65,12 @@ app.get("*", function (req, res) {
 
 io.on("connection", (socket) => {
     console.log("Server-side socket ID connected:", socket.id)
-
+    playerCount++
     //Listen for playerConnected from client containing locally stored playerID
     socket.on("playerConnected", (data) => {
         console.log("  -- NewPlayer:", data.socketId)
         players.push(data.socketId)
+        io.emit("updatePlayers", playerCount)
     })
     socket.on("whichPlayer", (data) => {
         console.log("  -- Player socket ID from client:", data.socketId)
@@ -120,6 +122,8 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         console.log("Server-side socket ID disconnected:", socket.id)
         console.log("")
+        playerCount--
+        io.emit("updatePlayers", playerCount)
     })
 })
 

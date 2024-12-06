@@ -197,6 +197,11 @@ socket.on("receiveIndex", (data) => {
     }
 })
 
+socket.on("updatePlayers", (data) => {
+    var playerCounter = document.getElementById("counter")
+    playerCounter.textContent = data + " Players Connected"
+})
+
 socket.on("nextScreen", (data) => {
     if(data == "prompt"){
         switchToPrompt()
