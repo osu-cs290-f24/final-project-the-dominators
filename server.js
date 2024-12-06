@@ -31,13 +31,13 @@ app.get("/lobby", function(req, res){
 app.get("/write", function (req, res) {
     if(gameData[0]){
        res.render("writePrompt", {
-            imgURL: gameData[0].canvasData
+            imgURL: gameData[gameData.length - 1].canvasData,
             firstPost: false 
         }) 
     }
     else{
         res.render("writePrompt", {
-            imgURL: ""
+            imgURL: "",
             firstPost: true 
         }) 
     }
@@ -71,7 +71,6 @@ io.on("connection", (socket) => {
         console.log("  -- Game ended. Player disconnected: ", data.socketId)
     })
     socket.on("canvasUpdate", (data) => {
-        console.log("  -- Canvas data and ID pushed to array: ", data.socketId, data.canvasData)
         gameData.push(data)
     })
 
