@@ -18,6 +18,10 @@ app.set("view engine", "handlebars")
 
 app.use(express.static("static"))
 
+app.get("/", function (req, res) {
+    res.render("home") //home has a "Depiction" sign, and a waiting for players sign, and a play button.
+})
+
 app.get("/write", function (req, res) {
     res.render("writePrompt")
 })
