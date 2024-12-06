@@ -33,7 +33,7 @@ app.get("/write", function (req, res) {
     var idx = req.query.idx
     if(gameData[idx]){
        res.render("writePrompt", {
-            imgURL: gameData[idx].canvasData, // give the player who is requesting the page the data of the next player index
+            imgURL: gameData[idx], // give the player who is requesting the page the data of the next player index
             firstPost: false 
         }) 
     }
@@ -80,13 +80,15 @@ io.on("connection", (socket) => {
             }
         }
 
-        io.emit("receiveIndex", index)
+        io.emit("receiveIndex", {socketId: data.socketId, idx:index})
     })
+
     socket.on("endGame", (data) => {
         console.log("  -- Game ended. Player disconnected: ", data.socketId)
     })
+
     socket.on("canvasUpdate", (data) => {
-        gameData.push(data)
+        gameData[data.idx] = data.canvasData
     })
 
     // Listen for text input from the client

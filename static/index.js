@@ -190,7 +190,9 @@ socket.on("receiveInput", (data) => {
 })
 
 socket.on("receiveIndex", (data) => {
-    index = data
+    if (data.socketId == playerSocketId) {    
+        index = data.idx
+    }
 })
 
 function trackPlayer(){
@@ -206,7 +208,7 @@ function endGame() {
 function getCanvasData(){
     console.log("Retrieved Canvas Data")
     var canvasData = canvas.toDataURL("image/png")
-    socket.emit('canvasUpdate', {socketId: playerSocketId, canvasData: canvasData})
+    socket.emit('canvasUpdate', {idx: index, canvasData: canvasData})
     var waitScreen = document.getElementById("wait-screen")
     waitScreen.style.display = "flex"
 
