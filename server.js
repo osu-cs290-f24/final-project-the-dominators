@@ -7,7 +7,7 @@ var { Server } = require("socket.io")
 var app = express()
 var server = http.createServer(app)
 var io = new Server(server)
-var PORT = process.env.PORT || 3522
+const PORT = process.env.PORT || 3000
 
 var promptToDraw = "Default Prompt"
 
