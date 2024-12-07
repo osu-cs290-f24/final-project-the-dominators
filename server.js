@@ -111,7 +111,7 @@ io.on("connection", (socket) => {
                 canvasData = []
                 promptData = []
             } else {
-                io.emit("nextScreen", "draw")
+                io.emit("nextScreen", "prompt")
                 round++
             }
             playerCtr = 0
