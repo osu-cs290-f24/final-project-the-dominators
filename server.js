@@ -37,7 +37,7 @@ app.get("/write", function (req, res) {
     console.log("CURRENT ROUND:", round)
     if(canvasData[(idx + ((round - 1) * players.length) + 1) % players.length]){
        res.render("writePrompt", {
-            imgURL: canvasData[(idx + ((round - 2) * players.length) + 1) % players.length],
+            imgURL: canvasData[(idx + ((round - 1) * players.length) + 1) % players.length],
             firstPost: false 
         }) 
     }
