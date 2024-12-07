@@ -35,11 +35,11 @@ app.get("/lobby", function(req, res){
 app.get("/write", function (req, res) {
     var idx = parseInt(req.query.idx)
     console.log("CURRENT ROUND:", round)
-    console.log((idx + ((round - 1) * players.length) + 1) % players.length)
+    console.log((((idx + 1) % players.length) + (((round - 1) / 2) * players.length)))
     console.log(canvasData)
-    if(canvasData[(idx + ((round - 1) * players.length) + 1) % players.length]){
+    if(canvasData[(((idx + 1) % players.length) + (((round - 1) / 2) * players.length))]){
        res.render("writePrompt", {
-            imgURL: canvasData[(idx + (((round - 1) / 2) * players.length) + 1) % players.length],
+            imgURL: canvasData[(((idx + 1) % players.length) + (((round - 1) / 2) * players.length))],
             firstPost: false 
         }) 
     }
@@ -54,10 +54,10 @@ app.get("/write", function (req, res) {
 app.get("/draw", function (req, res) {
     var idx = parseInt(req.query.idx)
     console.log("CURRENT ROUND:", round)
-    console.log((idx + ((round - 1) * players.length) + 1) % players.length)
+    console.log((((idx + 1) % players.length) + ((round / 2) * players.length)))
     console.log(promptData)
     res.render("drawPrompt", {
-        prompt: promptData[(idx + ((round / 2) * players.length) + 1) % players.length],
+        prompt: promptData[(((idx + 1) % players.length) + ((round / 2) * players.length))],
     }) 
 })
 
