@@ -71,17 +71,18 @@ io.on("connection", (socket) => {
         console.log("  -- NewPlayer:", data.socketId)
         var player = {id: data.socketId, username: data.username}
         players.push(player)
+        console.log(players)
         io.emit("updatePlayers", playerCount)
     })
     socket.on("whichPlayer", (data) => {
-        console.log("  -- Player socket ID from client:", data.socketId)
+        //console.log("  -- Player socket ID from client:", data.socketId)
 
         var index
 
         for (var i = 0; i < players.length; i++) {
             if (data.socketId == players[i].id) {
                 index = i
-                console.log("FOUND PLAYER")
+                console.log("FOUND PLAYER INDEX")
                 break
             }
         }
@@ -91,9 +92,9 @@ io.on("connection", (socket) => {
 
     socket.on("startButtonPressed", (data) => {
         if (!gameInSession) {
-            io.emit("startGame")
+            io.emit("startGame", "")
         } else {
-            
+            io.emit("startGame", "err")
         }
     })
 
@@ -117,8 +118,9 @@ io.on("connection", (socket) => {
         if(playerCtr == players.length){
             if (round == players.length - 1) {
                 //  End game
-                socket.emit("endGame")
+                io.emit("endGame")
                 io.emit("nextScreen", "gameEnd")
+                round = 0
                 players = []
             } else {
                 io.emit("nextScreen", "draw")
@@ -134,6 +136,7 @@ io.on("connection", (socket) => {
         for (var i = 0; i < players.length; i++) {
             if (players[i] && players[i].id == data) {
                 players.splice(i, 1)
+                console.log("  -- Removed Player:", data)
             }
         }
         io.emit("updatePlayers", playerCount)

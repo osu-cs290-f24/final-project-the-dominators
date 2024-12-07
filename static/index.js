@@ -250,9 +250,9 @@ socket.on("endGame", (data) => {
 
 function endGame() {
     console.log("== Game Over")
-    localStorage.removeItem("socketId")
+    //localStorage.removeItem("socketId")
     localStorage.removeItem("username")
-    socket.emit("endGame", {socketId: playerSocketId})
+    //socket.emit("endGame", {socketId: playerSocketId})
 }
 
 function getCanvasData(){
@@ -266,6 +266,6 @@ function getCanvasData(){
 window.addEventListener("unload", () => {
     if (window.location.pathname == "/lobby") {
         socket.emit("leaveLobby")
-        socket.emit("removePlayer", playerSocketId)
+        //socket.emit("removePlayer", playerSocketId)
     }
 });
