@@ -39,7 +39,7 @@ app.get("/write", function (req, res) {
     console.log(canvasData)
     if(canvasData[(idx + ((round - 1) * players.length) + 1) % players.length]){
        res.render("writePrompt", {
-            imgURL: canvasData[(idx + ((round - 1) * players.length) + 1) % players.length],
+            imgURL: canvasData[(idx + (((round - 1) / 2) * players.length) + 1) % players.length],
             firstPost: false 
         }) 
     }
@@ -57,7 +57,7 @@ app.get("/draw", function (req, res) {
     console.log((idx + ((round - 1) * players.length) + 1) % players.length)
     console.log(promptData)
     res.render("drawPrompt", {
-        prompt: promptData[(idx + ((round - 1) * players.length) + 1) % players.length],
+        prompt: promptData[(idx + ((round / 2) * players.length) + 1) % players.length],
     }) 
 })
 
@@ -103,7 +103,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("canvasUpdate", (data) => {
-        canvasData[data.idx + (round * players.length)] = data.canvasData
+        canvasData[data.idx + (((round - 1) / 2) * players.length)] = data.canvasData
         playerCtr++
         if(playerCtr == players.length){
             if (round == players.length - 1) {
@@ -126,7 +126,7 @@ io.on("connection", (socket) => {
     socket.on("sendInput", (data) => {
         console.log("Received input:", data.promptData)
 
-        promptData[data.idx + (round * players.length)] = data.promptData
+        promptData[data.idx + ((round / 2) * players.length)] = data.promptData
         playerCtr++
         if(playerCtr == players.length){
             if (round == players.length - 1) {
