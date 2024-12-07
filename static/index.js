@@ -9,9 +9,8 @@ function switchToPrompt() {
     window.location.href = `/write?idx=${encodeURIComponent(index)}`
 }
 
-function switchToLobby(){
-    window.location.href = "/lobby"
-    localStorage.removeItem("socketId")
+function switchToEndGameScreen() {
+    window.location.href = "/"
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -148,13 +147,20 @@ if (canvas) {
 console.log("Attempting to connect to the server...")
 const socket = io()
 var playerSocketId
+var username
 
 socket.on("connect", () => {
     console.log("Connected to server with ID:", socket.id)
+    if (window.location.pathname == "/") {
+        localStorage.removeItem("socketId")
+        localStorage.removeItem("username")
+    } else {
+        username = localStorage.getItem("username")
+    }
 
     if (!localStorage.hasOwnProperty("socketId")){
         localStorage.setItem("socketId", socket.id)
-        socket.emit("playerConnected", {socketId: socket.id})
+        socket.emit("playerConnected", {socketId: socket.id, username: username})
     } 
 
     playerSocketId = localStorage.getItem("socketId")
@@ -168,12 +174,26 @@ function startGame() {
 }
 
 socket.on("startGame", data => {
+    if (window.location.pathname == "/") {
+        socket.emit("removePlayer", playerSocketId)
+    }
+    
     if (data == "err") {
         alert("Game already in session")
     } else {
         switchToPrompt()
     }
 })
+
+function switchToLobby(){
+    username = document.getElementById("username-text").value
+    
+    localStorage.setItem("username", username)
+
+    socket.emit("joinLobby")
+
+    window.location.href = "/lobby"
+}
 
 function sendInput(event) {
     event.preventDefault()
@@ -188,9 +208,6 @@ function sendInput(event) {
     var waitScreen = document.getElementById("wait-screen")
     waitScreen.style.display = "flex"
     // window.location.href = "/draw"
-    }
-    else{
-        
     }
 }
 
@@ -210,6 +227,7 @@ socket.on("receiveIndex", (data) => {
 socket.on("updatePlayers", (data) => {
     var playerCounter = document.getElementById("counter")
     if (playerCounter) playerCounter.textContent = data + " Players Connected"
+    trackPlayer()
 })
 
 socket.on("nextScreen", (data) => {
@@ -218,7 +236,7 @@ socket.on("nextScreen", (data) => {
     } else if (data == "draw") {
         switchToDraw()
     } else {
-        switchToLobby()
+        switchToEndGameScreen()
     }
 })
 
@@ -233,6 +251,7 @@ socket.on("endGame", (data) => {
 function endGame() {
     console.log("== Game Over")
     localStorage.removeItem("socketId")
+    localStorage.removeItem("username")
     socket.emit("endGame", {socketId: playerSocketId})
 }
 
@@ -244,4 +263,9 @@ function getCanvasData(){
     waitScreen.style.display = "flex"
 }
 
-
+window.addEventListener("unload", () => {
+    if (window.location.pathname == "/lobby") {
+        socket.emit("leaveLobby")
+        socket.emit("removePlayer", playerSocketId)
+    }
+});

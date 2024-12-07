@@ -66,11 +66,11 @@ app.get("*", function (req, res) {
 
 io.on("connection", (socket) => {
     console.log("Server-side socket ID connected:", socket.id)
-    playerCount++
     //Listen for playerConnected from client containing locally stored playerID
     socket.on("playerConnected", (data) => {
         console.log("  -- NewPlayer:", data.socketId)
-        players.push(data.socketId)
+        var player = {id: data.socketId, username: data.username}
+        players.push(player)
         io.emit("updatePlayers", playerCount)
     })
     socket.on("whichPlayer", (data) => {
@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
         var index
 
         for (var i = 0; i < players.length; i++) {
-            if (data.socketId == players[i]) {
+            if (data.socketId == players[i].id) {
                 index = i
                 console.log("FOUND PLAYER")
                 break
@@ -119,6 +119,7 @@ io.on("connection", (socket) => {
                 //  End game
                 socket.emit("endGame")
                 io.emit("nextScreen", "gameEnd")
+                players = []
             } else {
                 io.emit("nextScreen", "draw")
             }
@@ -127,14 +128,28 @@ io.on("connection", (socket) => {
 
         // Broadcast the data to all connected clients
         io.emit("receiveInput", data)
+}) 
+    
+    socket.on("removePlayer", (data) => {
+        for (var i = 0; i < players.length; i++) {
+            if (players[i] && players[i].id == data) {
+                players.splice(i, 1)
+            }
+        }
+        io.emit("updatePlayers", playerCount)
+    })
+
+    socket.on("joinLobby", (data) => {
+        playerCount++
+    })
+
+    socket.on("leaveLobby", (data) => {
+        playerCount--
     })
 
     // Handle disconnect
-    socket.on("disconnect", () => {
+    socket.on("disconnect", (data) => {
         console.log("Server-side socket ID disconnected:", socket.id)
-        console.log("")
-        playerCount--
-        io.emit("updatePlayers", playerCount)
     })
 })
 
