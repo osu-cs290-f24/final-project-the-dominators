@@ -39,7 +39,7 @@ app.get("/write", function (req, res) {
     console.log(canvasData)
     if(canvasData[(((idx + 1) % players.length) + (((round - 1) / 2) * players.length))]){
        res.render("writePrompt", {
-            imgURL: canvasData[(((idx + 1) % players.length) + (((round - 1) / 2) * players.length))],
+            imgURL: canvasData[(((idx + 1) % players.length) + (((round) / 2) * players.length))],
             firstPost: false 
         }) 
     }
@@ -57,7 +57,7 @@ app.get("/draw", function (req, res) {
     console.log((((idx + 1) % players.length) + ((round / 2) * players.length)))
     console.log(promptData)
     res.render("drawPrompt", {
-        prompt: promptData[(((idx + 1) % players.length) + ((round / 2) * players.length))],
+        prompt: promptData[(((idx + 1) % players.length) + (((round - 1) / 2) * players.length))]
     }) 
 })
 
