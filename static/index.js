@@ -1,9 +1,9 @@
 //Switch Screens
-function switchToDraw() {
-    window.location.href = "/draw"
-}
-
 var index
+
+function switchToDraw() {
+    window.location.href = `/draw?idx=${encodeURIComponent(index)}`
+}
 
 function switchToPrompt() {
     window.location.href = `/write?idx=${encodeURIComponent(index)}`
@@ -29,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var submitDrawingButton = document.getElementById("submit-drawing")
     if (submitDrawingButton) submitDrawingButton.addEventListener("click", getCanvasData)
+
+    if (window.location.pathname == "/lobby") {
+        socket.emit("joinLobby")
+    }
   })
 
 //Canvas
@@ -152,6 +156,7 @@ var username
 socket.on("connect", () => {
     console.log("Connected to server with ID:", socket.id)
     if (window.location.pathname == "/") {
+        socket.emit("removePlayer", localStorage.getItem("socketId"))
         localStorage.removeItem("socketId")
         localStorage.removeItem("username")
     } else {
@@ -166,14 +171,13 @@ socket.on("connect", () => {
     playerSocketId = localStorage.getItem("socketId")
     console.log("Player socket ID from localStorage:", playerSocketId)
     trackPlayer()
-
 })
 
 function startGame() {
     socket.emit("startButtonPressed")
 }
 
-socket.on("startGame", data => {
+socket.on("startGame", (data) => {
     if (window.location.pathname == "/") {
         socket.emit("removePlayer", playerSocketId)
     }
@@ -190,14 +194,12 @@ function switchToLobby(){
     
     localStorage.setItem("username", username)
 
-    socket.emit("joinLobby")
-
     window.location.href = "/lobby"
 }
 
 function sendInput(event) {
     event.preventDefault()
-    var userInput = document.getElementById("prompt-text").value
+    var userInput = {idx: index, promptData: document.getElementById("prompt-text").value}
     if(userInput){
     // Send input to the server
     socket.emit("sendInput", userInput)
@@ -231,7 +233,7 @@ socket.on("updatePlayers", (data) => {
 })
 
 socket.on("nextScreen", (data) => {
-    if(data == "prompt"){
+    if(data == "prompt") {
         switchToPrompt()
     } else if (data == "draw") {
         switchToDraw()

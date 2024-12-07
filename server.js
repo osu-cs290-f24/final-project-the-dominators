@@ -9,9 +9,8 @@ var server = http.createServer(app)
 var io = new Server(server)
 const PORT = process.env.PORT || 3000
 
-var promptToDraw = "Default Prompt"
-
-var gameData = []
+var canvasData = []
+var promptData = []
 var players = []
 var playerCtr = 0
 var round = 0
@@ -36,9 +35,9 @@ app.get("/lobby", function(req, res){
 app.get("/write", function (req, res) {
     var idx = parseInt(req.query.idx)
     console.log("CURRENT ROUND:", round)
-    if(gameData[idx + ((round - 1) * players.length)]){
+    if(canvasData[(idx + ((round - 1) * players.length) + 1) % players.length]){
        res.render("writePrompt", {
-            imgURL: gameData[idx + ((round - 1) * players.length)],
+            imgURL: canvasData[(idx + ((round - 1) * players.length) + 1) % players.length],
             firstPost: false 
         }) 
     }
@@ -51,9 +50,11 @@ app.get("/write", function (req, res) {
 })
 
 app.get("/draw", function (req, res) {
+    var idx = parseInt(req.query.idx)
+    console.log("CURRENT ROUND:", round)
     res.render("drawPrompt", {
-        prompt: promptToDraw
-    })
+        prompt: promptData[(idx + ((round) * players.length) + 1) % players.length],
+    }) 
 })
 
 app.get("*", function (req, res) {
@@ -72,7 +73,6 @@ io.on("connection", (socket) => {
         var player = {id: data.socketId, username: data.username}
         players.push(player)
         console.log(players)
-        io.emit("updatePlayers", playerCount)
     })
     socket.on("whichPlayer", (data) => {
         //console.log("  -- Player socket ID from client:", data.socketId)
@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("canvasUpdate", (data) => {
-        gameData[data.idx + (round * players.length)] = data.canvasData
+        canvasData[data.idx + (round * players.length)] = data.canvasData
         playerCtr++
         if(playerCtr == players.length){
             io.emit("nextScreen", "prompt")
@@ -110,10 +110,9 @@ io.on("connection", (socket) => {
 
     // Listen for text input from the client
     socket.on("sendInput", (data) => {
-        console.log("Received input:", data)
+        console.log("Received input:", data.promptData)
 
-        promptToDraw = data
-
+        promptData[data.idx + (round * players.length)] = data.promptData
         playerCtr++
         if(playerCtr == players.length){
             if (round == players.length - 1) {
@@ -133,21 +132,25 @@ io.on("connection", (socket) => {
 }) 
     
     socket.on("removePlayer", (data) => {
+        console.log("  -- Attempting to Remove Player:", data)
         for (var i = 0; i < players.length; i++) {
             if (players[i] && players[i].id == data) {
                 players.splice(i, 1)
                 console.log("  -- Removed Player:", data)
             }
         }
-        io.emit("updatePlayers", playerCount)
     })
 
     socket.on("joinLobby", (data) => {
+        console.log("PLAYERCOUNT++")
         playerCount++
+        io.emit("updatePlayers", playerCount)
     })
 
     socket.on("leaveLobby", (data) => {
+        console.log("PLAYERCOUNT--")
         playerCount--
+        io.emit("updatePlayers", playerCount)
     })
 
     // Handle disconnect
