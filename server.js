@@ -37,7 +37,7 @@ app.get("/write", function (req, res) {
     console.log("CURRENT ROUND:", round)
     if(canvasData[(idx + ((round - 1) * players.length) + 1) % players.length]){
        res.render("writePrompt", {
-            imgURL: canvasData[(idx + ((round - 1) * players.length) + 1) % players.length],
+            imgURL: canvasData[(idx + ((round - 2) * players.length) + 1) % players.length],
             firstPost: false 
         }) 
     }
@@ -53,7 +53,7 @@ app.get("/draw", function (req, res) {
     var idx = parseInt(req.query.idx)
     console.log("CURRENT ROUND:", round)
     res.render("drawPrompt", {
-        prompt: promptData[(idx + ((round) * players.length) + 1) % players.length],
+        prompt: promptData[(idx + ((round - 1) * players.length) + 1) % players.length],
     }) 
 })
 
@@ -102,9 +102,19 @@ io.on("connection", (socket) => {
         canvasData[data.idx + (round * players.length)] = data.canvasData
         playerCtr++
         if(playerCtr == players.length){
-            io.emit("nextScreen", "prompt")
+            if (round == players.length - 1) {
+                //  End game
+                io.emit("endGame")
+                io.emit("nextScreen", "gameEnd")
+                round = 0
+                players = []
+                canvasData = []
+                promptData = []
+            } else {
+                io.emit("nextScreen", "draw")
+                round++
+            }
             playerCtr = 0
-            round++
         }
     })
 
@@ -121,8 +131,11 @@ io.on("connection", (socket) => {
                 io.emit("nextScreen", "gameEnd")
                 round = 0
                 players = []
+                canvasData = []
+                promptData = []
             } else {
                 io.emit("nextScreen", "draw")
+                round++
             }
             playerCtr = 0
         }
