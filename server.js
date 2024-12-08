@@ -61,6 +61,29 @@ app.get("/draw", function (req, res) {
     }) 
 })
 
+app.get("/results/:index", function (req, res) {
+    var idx = req.params.index
+    var firstPrompt = promptData[idx]
+    var tempArr = []
+    console.log(idx)
+
+    for (var i = 1; i < players.length; i++) {
+        if (i % 2 == 0) {
+            var resultCard = {prompt: promptData[idx * i], imgURL: ""}
+        } else {
+            var resultCard = {prompt: "", imgURL: canvasData[idx * i]}
+        }
+
+        tempArr[i-1] = resultCard
+    }
+
+    res.render("results", {
+        username: players[idx].username,
+        firstPrompt: firstPrompt,
+        results: tempArr
+    })
+})
+
 app.get("*", function (req, res) {
     res.render("404")
 })
@@ -110,10 +133,10 @@ io.on("connection", (socket) => {
                 //  End game
                 io.emit("endGame")
                 io.emit("nextScreen", "gameEnd")
-                round = 0
-                players = []
-                canvasData = []
-                promptData = []
+                // round = 0
+                // players = []
+                // canvasData = []
+                // promptData = []
             } else {
                 io.emit("nextScreen", "prompt")
                 round++

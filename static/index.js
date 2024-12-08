@@ -10,7 +10,7 @@ function switchToPrompt() {
 }
 
 function switchToEndGameScreen() {
-    window.location.href = "/"
+    window.location.href = "/results/0"
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -165,7 +165,6 @@ socket.on("connect", () => {
 
     if (!localStorage.hasOwnProperty("socketId")){
         localStorage.setItem("socketId", socket.id)
-        socket.emit("playerConnected", {socketId: socket.id, username: username})
     } 
 
     playerSocketId = localStorage.getItem("socketId")
@@ -193,6 +192,8 @@ function switchToLobby(){
     username = document.getElementById("username-text").value
     
     localStorage.setItem("username", username)
+
+    socket.emit("playerConnected", {socketId: socket.id, username: username})
 
     window.location.href = "/lobby"
 }
