@@ -413,6 +413,7 @@ img {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 40px;
 }
 
 .results-button {
@@ -452,7 +453,7 @@ img {
 
 .results-header {
     margin: auto;
-    margin-top: 40px;
+    margin-top: 0px;
     margin-bottom: 0px;
     padding-top: 20px;
     padding-left: 40px;
@@ -471,7 +472,7 @@ img {
     flex-direction: column;
     justify-content: center;
 }
-.results {
+.result-card {
     margin: auto;
     margin-top: 20px;
     padding: 20px;
@@ -487,4 +488,8 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.result-card h1 {
+    margin: 10px;
 }
