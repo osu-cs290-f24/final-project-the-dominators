@@ -184,7 +184,7 @@ input::placeholder {
     align-self: center;
 }
 
-.play-button:hover, .submit-prompt:hover, .submit-drawing:hover {
+.play-button:hover, .submit-prompt:hover, .submit-drawing:hover, .results-button:hover {
     background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
 }
@@ -405,4 +405,86 @@ img {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.results-page {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.results-button {
+    background-color: rgba(0, 0, 0, .2);
+    width: 170px;
+    height: 70px;
+    margin: auto;
+    margin-bottom: 0px;
+    margin-left: 40px;
+    margin-right: 40px;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, .4);
+    font-size: larger;
+    backdrop-filter: blur(3px);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.empty-button {
+    background-color: rgba(0, 0, 0, 0);
+    width: 170px;
+    height: 70px;
+    margin: auto;
+    margin-bottom: 0px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.results-content {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.results-header {
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 0px;
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 5px;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, .4);
+    width: auto;
+    height: auto;
+    background-color: rgba(0, 0, 0, .2);
+    backdrop-filter: blur(3px);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.results {
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, .4);
+    width: auto;
+    height: auto;
+    background-color: rgba(0, 0, 0, .2);
+    backdrop-filter: blur(3px);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
