@@ -179,6 +179,7 @@ function startGame() {
 socket.on("startGame", (data) => {
     if (window.location.pathname == "/") {
         socket.emit("removePlayer", playerSocketId)
+        return
     }
     
     if (data == "err") {
@@ -271,4 +272,4 @@ window.addEventListener("unload", () => {
         socket.emit("leaveLobby")
         //socket.emit("removePlayer", playerSocketId)
     }
-});
+})

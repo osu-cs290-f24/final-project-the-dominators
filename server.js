@@ -119,9 +119,10 @@ io.on("connection", (socket) => {
 
     socket.on("startButtonPressed", (data) => {
         if (!gameInSession) {
-            io.emit("startGame", "")
+            gameInSession = true;
+            socket.emit("startGame", "")
         } else {
-            io.emit("startGame", "err")
+            socket.emit("startGame", "err")
         }
     })
 
