@@ -2,6 +2,10 @@
 var index
 var resultsPageIdx = 0
 
+function switchBackToLobby(){
+    window.location.href = "/"
+}
+
 function switchToDraw() {
     window.location.href = `/draw?idx=${encodeURIComponent(index)}`
 }
@@ -49,13 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var backToLobbyButton = document.getElementById("back-to-lobby")
     if (backToLobbyButton) backToLobbyButton.addEventListener("click", () => {
-        window.location.href = "/"
+        var waitScreen = document.getElementById("wait-screen")
+        waitScreen.style.display = "flex"
+        socket.emit('joinLobbyWait')
     })
 
     if (window.location.pathname == "/lobby") {
         socket.emit("joinLobby")
     }
-  })
+    })
 
 //Canvas
 var canvas = document.getElementById("canvas")
@@ -261,6 +267,8 @@ socket.on("nextScreen", (data) => {
         switchToPrompt()
     } else if (data == "draw") {
         switchToDraw()
+    } else if(data == "lobby"){
+        switchBackToLobby()
     } else {
         switchToEndGameScreen()
     }

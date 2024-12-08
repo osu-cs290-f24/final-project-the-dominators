@@ -213,6 +213,19 @@ io.on("connection", (socket) => {
         io.emit("updatePlayers", playerCount)
     })
 
+    socket.on("joinLobbyWait", (data) => {
+        playerCtr++
+        if(playerCtr == players.length){
+            io.emit("nextScreen", "lobby")
+            playerCtr = 0
+            gameInSession = false
+            round = 0
+            players = []
+            canvasData = []
+            promptData = []
+        }
+    })
+
     // Handle disconnect
     socket.on("disconnect", (data) => {
         console.log("Server-side socket ID disconnected:", socket.id)
