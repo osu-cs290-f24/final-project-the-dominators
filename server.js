@@ -36,7 +36,7 @@ app.get("/write", function (req, res) {
     var idx = parseInt(req.query.idx)
     console.log("CURRENT ROUND:", round)
     console.log((((idx + 1) % players.length) + (((round - 2) / 2) * players.length)))
-    console.log(canvasData)
+    //console.log(canvasData)
     if(canvasData[(((idx + 1) % players.length) + (((round - 2) / 2) * players.length))]){
        res.render("writePrompt", {
             imgURL: canvasData[(((idx + 1) % players.length) + (((round - 2) / 2) * players.length))],
@@ -62,25 +62,41 @@ app.get("/draw", function (req, res) {
 })
 
 app.get("/results/:index", function (req, res) {
-    var idx = req.params.index
+    var idx = parseInt(req.params.index)
     var firstPrompt = promptData[idx]
     var tempArr = []
+    var previous
+    var next
     console.log(idx)
 
     for (var i = 1; i < players.length; i++) {
         if (i % 2 == 0) {
-            var resultCard = {prompt: promptData[idx * i], imgURL: ""}
+            var resultCard = {prompt: promptData[(((idx + players.length - 2) % players.length) + (((i) / 2) * players.length))], imgURL: "", username: players[(idx + i) % players.length].username}
         } else {
-            var resultCard = {prompt: "", imgURL: canvasData[idx * i]}
+            var resultCard = {prompt: "", imgURL: canvasData[(((idx + players.length - 1) % players.length) + (((i - 1) / 2) * players.length))], username: players[(idx + i) % players.length].username}
         }
 
         tempArr[i-1] = resultCard
     }
 
+    if (idx == 0) {
+        previous = false
+    } else {
+        previous = true
+    }
+
+    if (idx == players.length - 1) {
+        next = false
+    } else {
+        next = true
+    }
+
     res.render("results", {
         username: players[idx].username,
         firstPrompt: firstPrompt,
-        results: tempArr
+        results: tempArr,
+        previous: previous,
+        next: next
     })
 })
 
@@ -97,9 +113,11 @@ io.on("connection", (socket) => {
     //Listen for playerConnected from client containing locally stored playerID
     socket.on("playerConnected", (data) => {
         console.log("  -- NewPlayer:", data.socketId)
-        var player = {id: data.socketId, username: data.username}
-        players.push(player)
-        console.log(players)
+        if (!gameInSession) {
+            var player = {id: data.socketId, username: data.username}
+            players.push(player)
+            console.log(players)
+        }
     })
     socket.on("whichPlayer", (data) => {
         //console.log("  -- Player socket ID from client:", data.socketId)
@@ -120,9 +138,9 @@ io.on("connection", (socket) => {
     socket.on("startButtonPressed", (data) => {
         if (!gameInSession) {
             gameInSession = true;
-            socket.emit("startGame", "")
+            io.emit("startGame", "")
         } else {
-            socket.emit("startGame", "err")
+            io.emit("startGame", data.socketId)
         }
     })
 
@@ -157,10 +175,11 @@ io.on("connection", (socket) => {
                 //  End game
                 io.emit("endGame")
                 io.emit("nextScreen", "gameEnd")
-                round = 0
-                players = []
-                canvasData = []
-                promptData = []
+                // round = 0
+                // players = []
+                // canvasData = []
+                // promptData = []cls
+
             } else {
                 io.emit("nextScreen", "draw")
                 round++

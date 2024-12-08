@@ -1,5 +1,6 @@
 //Switch Screens
 var index
+var resultsPageIdx = 0
 
 function switchToDraw() {
     window.location.href = `/draw?idx=${encodeURIComponent(index)}`
@@ -10,7 +11,7 @@ function switchToPrompt() {
 }
 
 function switchToEndGameScreen() {
-    window.location.href = "/results/0"
+    window.location.href = `/results/${resultsPageIdx}}`
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,6 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var submitDrawingButton = document.getElementById("submit-drawing")
     if (submitDrawingButton) submitDrawingButton.addEventListener("click", getCanvasData)
+
+    var previousButton = document.getElementById("previous")
+    if (previousButton) previousButton.addEventListener("click", () => {
+        var splitPath = window.location.pathname.split("/")
+        resultsPageIdx = parseInt(splitPath[splitPath.length-1])
+        resultsPageIdx--
+        switchToEndGameScreen()
+    })
+
+    var nextButton = document.getElementById("next")
+    if (nextButton) nextButton.addEventListener("click", () => {
+        var splitPath = window.location.pathname.split("/")
+        resultsPageIdx = parseInt(splitPath[splitPath.length-1])
+        resultsPageIdx++
+        switchToEndGameScreen()
+    })
+
+    var backToLobbyButton = document.getElementById("back-to-lobby")
+    if (backToLobbyButton) backToLobbyButton.addEventListener("click", () => {
+        window.location.href = "/"
+    })
 
     if (window.location.pathname == "/lobby") {
         socket.emit("joinLobby")
@@ -173,7 +195,7 @@ socket.on("connect", () => {
 })
 
 function startGame() {
-    socket.emit("startButtonPressed")
+    socket.emit("startButtonPressed", playerSocketId)
 }
 
 socket.on("startGame", (data) => {
@@ -182,9 +204,9 @@ socket.on("startGame", (data) => {
         return
     }
     
-    if (data == "err") {
+    if (data == playerSocketId) {
         alert("Game already in session")
-    } else {
+    } else if (data == "") {
         switchToPrompt()
     }
 })
