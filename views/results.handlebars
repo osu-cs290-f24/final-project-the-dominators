@@ -1,10 +1,23 @@
-<div class="resultsPage">
-    <h1>{{username}}</h1>
-    <h1>{{firstPrompt}}</h1>
-
-    <div class="results">
-        {{#each results}}
-            {{> resultCard}}
-        {{/each}}
+<div class="results-page">
+    {{#if previous}}
+        <button class="results-button" id="previous">Previous</button>
+    {{else}}
+        <div class="empty-button"></div>
+    {{/if}}
+    <div class="results-content">
+        <div class="results-header">
+            <h3>{{username}}'s Results</h3>
+            <h1>Starting prompt: {{firstPrompt}}</h1>
+        </div>
+        <div class="results">
+            {{#each results}}
+                {{> resultCard}}
+            {{/each}}
+        </div>
     </div>
+    {{#if next}}
+        <button class="results-button" id="next">Next</button>
+    {{else}}
+        <button class="results-button" id="back-to-lobby">Back to Lobby</button>
+    {{/if}}
 </div>
