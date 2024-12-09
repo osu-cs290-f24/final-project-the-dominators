@@ -8,9 +8,11 @@ templates['resultCard'] = template({"compiler":[8,">= 4.3.0"],"main":function(co
         return undefined
     };
 
-  return "<div class=\"result-card\">\r\n    <h1>Bobby:</h1>\r\n    <h3>"
+  return "<div class=\"result-card\">\r\n    <h1>"
+    + alias4(((helper = (helper = lookupProperty(helpers,"username") || (depth0 != null ? lookupProperty(depth0,"username") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"username","hash":{},"data":data,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":20}}}) : helper)))
+    + "</h1>\r\n    <h1>"
     + alias4(((helper = (helper = lookupProperty(helpers,"prompt") || (depth0 != null ? lookupProperty(depth0,"prompt") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"prompt","hash":{},"data":data,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":18}}}) : helper)))
-    + "</h3>\r\n    <img src=\""
+    + "</h1>\r\n    <img src=\""
     + alias4(((helper = (helper = lookupProperty(helpers,"imgURL") || (depth0 != null ? lookupProperty(depth0,"imgURL") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"imgURL","hash":{},"data":data,"loc":{"start":{"line":4,"column":14},"end":{"line":4,"column":24}}}) : helper)))
     + "\">\r\n</div>";
 },"useData":true});

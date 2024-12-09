@@ -83,54 +83,50 @@ if (canvas) {
     canvas.addEventListener("mouseup", stopDrawing)
     canvas.addEventListener("mouseout", stopDrawing)
 
+    //changing strokeWidth 
+    var strokeWidthInput = document.getElementById("stroke-width-input");
+    strokeWidthInput.addEventListener("input", function () {
+        strokeWidth = parseInt(Math.pow(parseInt(strokeWidthInput.value), 2));
+    })
+    
     document.getElementById("white").addEventListener("click", function() {
         context.strokeStyle = "white"
-        strokeWidth = 5
     })
     
     document.getElementById("black").addEventListener("click", function() {
         context.strokeStyle = "black"
-        strokeWidth = 5
     })
 
     document.getElementById("gray").addEventListener("click", function() {
         context.strokeStyle = "rgb(80, 80, 80)"
-        strokeWidth = 5
     })
 
     document.getElementById("brown").addEventListener("click", function() {
         context.strokeStyle = "rgb(99, 48, 13)"
-        strokeWidth = 5
     })
     
     document.getElementById("red").addEventListener("click", function() {
         context.strokeStyle = "rgb(242, 34, 14)"
-        strokeWidth = 5
     })
 
     document.getElementById("orange").addEventListener("click", function() {
         context.strokeStyle = "rgb(241, 142, 2)"
-        strokeWidth = 5
     })
     
     document.getElementById("blue").addEventListener("click", function() {
         context.strokeStyle = "rgb(4, 66, 245)"
-        strokeWidth = 5
     })
 
     document.getElementById("purple").addEventListener("click", function() {
         context.strokeStyle = "rgb(129, 0, 166)"
-        strokeWidth = 5
     })
 
     document.getElementById("green").addEventListener("click", function() {
         context.strokeStyle = "rgb(99, 167, 46)"
-        strokeWidth = 5
     })
     
     document.getElementById("yellow").addEventListener("click", function() {
         context.strokeStyle = "rgb(244, 242, 39)"
-        strokeWidth = 5
     })
     
     var canvasOffsetX = canvas.getBoundingClientRect().left
@@ -153,18 +149,17 @@ if (canvas) {
     })
     
     var isDrawing = false
-    var strokeWidth = 5
+    var strokeWidth = 9     //initialized to 9 because the initial displayed width is 3 and 3^2=9
     var startX
     var startY
     
     document.getElementById("pen").addEventListener("click", function() {
         context.strokeStyle = "black"
-        strokeWidth = 5
     })
     
     document.getElementById("eraser").addEventListener("click", function() {
         context.strokeStyle = "white"
-        strokeWidth = 15
+        // strokeWidth = 15
     })
     
     document.querySelector(".select-clear").addEventListener("click", function() {

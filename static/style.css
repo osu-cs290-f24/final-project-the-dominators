@@ -361,6 +361,31 @@ input::placeholder {
     background-color: rgba(0, 0, 0, 0);
 }
 
+.stroke-width {
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    color: black;
+    font-size: larger; 
+    gap: 5px; 
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-style: solid;
+    border-width: 4px;
+    margin: 10px;
+    padding: 10px; 
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.stroke-width input {
+    backdrop-filter: none;
+}
+
 .select-clear {
     background-color: rgba(0, 0, 0, .2);
     border-width: 4px;
