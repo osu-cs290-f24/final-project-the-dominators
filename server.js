@@ -127,12 +127,12 @@ io.on("connection", (socket) => {
         for (var i = 0; i < players.length; i++) {
             if (data.socketId == players[i].id) {
                 index = i
-                console.log("FOUND PLAYER INDEX")
+                console.log("FOUND PLAYER INDEX: ", players[i].id)
                 break
             }
         }
 
-        io.emit("receiveIndex", {socketId: data.socketId, idx:index})
+        io.emit("receiveIndex", {socketId: data.socketId, idx: index})
     })
 
     socket.on("startButtonPressed", (data) => {
@@ -140,7 +140,7 @@ io.on("connection", (socket) => {
             gameInSession = true;
             io.emit("startGame", "")
         } else {
-            io.emit("startGame", data.socketId)
+            io.emit("startGame", data)
         }
     })
 
@@ -216,13 +216,13 @@ io.on("connection", (socket) => {
     socket.on("joinLobbyWait", (data) => {
         playerCtr++
         if(playerCtr == players.length){
-            io.emit("nextScreen", "lobby")
             playerCtr = 0
             gameInSession = false
             round = 0
             players = []
             canvasData = []
             promptData = []
+            io.emit("nextScreen", "lobby")
         }
     })
 

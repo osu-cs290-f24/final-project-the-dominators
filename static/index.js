@@ -2,11 +2,17 @@
 var index
 var resultsPageIdx = 0
 
-function switchBackToLobby(){
+function switchBackToLobby() {
+    if (window.location.pathname == "/" || window.location.pathname == "/lobby") {
+        return
+    }
     window.location.href = "/"
 }
 
 function switchToDraw() {
+    if (window.location.pathname == "/" || window.location.pathname == "/lobby") {
+        return
+    }
     window.location.href = `/draw?idx=${encodeURIComponent(index)}`
 }
 
@@ -15,6 +21,9 @@ function switchToPrompt() {
 }
 
 function switchToEndGameScreen() {
+    if (window.location.pathname == "/" || window.location.pathname == "/lobby") {
+        return
+    }
     window.location.href = `/results/${resultsPageIdx}}`
 }
 
@@ -83,24 +92,44 @@ if (canvas) {
         context.strokeStyle = "black"
         strokeWidth = 5
     })
+
+    document.getElementById("gray").addEventListener("click", function() {
+        context.strokeStyle = "rgb(80, 80, 80)"
+        strokeWidth = 5
+    })
+
+    document.getElementById("brown").addEventListener("click", function() {
+        context.strokeStyle = "rgb(99, 48, 13)"
+        strokeWidth = 5
+    })
     
     document.getElementById("red").addEventListener("click", function() {
-        context.strokeStyle = "red"
+        context.strokeStyle = "rgb(242, 34, 14)"
+        strokeWidth = 5
+    })
+
+    document.getElementById("orange").addEventListener("click", function() {
+        context.strokeStyle = "rgb(241, 142, 2)"
         strokeWidth = 5
     })
     
     document.getElementById("blue").addEventListener("click", function() {
-        context.strokeStyle = "blue"
+        context.strokeStyle = "rgb(4, 66, 245)"
         strokeWidth = 5
     })
-    
+
+    document.getElementById("purple").addEventListener("click", function() {
+        context.strokeStyle = "rgb(129, 0, 166)"
+        strokeWidth = 5
+    })
+
     document.getElementById("green").addEventListener("click", function() {
-        context.strokeStyle = "green"
+        context.strokeStyle = "rgb(99, 167, 46)"
         strokeWidth = 5
     })
     
     document.getElementById("yellow").addEventListener("click", function() {
-        context.strokeStyle = "yellow"
+        context.strokeStyle = "rgb(244, 242, 39)"
         strokeWidth = 5
     })
     
@@ -206,40 +235,53 @@ function startGame() {
 
 socket.on("startGame", (data) => {
     if (window.location.pathname == "/") {
-        socket.emit("removePlayer", playerSocketId)
+        socket.emit("removePlayer", localStorage.getItem("socketId"))
         return
     }
-    
+
+    console.log("Game start: ", data)
+
     if (data == playerSocketId) {
         alert("Game already in session")
-    } else if (data == "") {
+    }
+    
+    if (data == "") {
         switchToPrompt()
     }
 })
 
 function switchToLobby(){
     username = document.getElementById("username-text").value
-    
-    localStorage.setItem("username", username)
 
-    socket.emit("playerConnected", {socketId: socket.id, username: username})
+    if (username == "") {
+        alert("Please enter a username")
+    } else {
+        localStorage.setItem("username", username)
 
-    window.location.href = "/lobby"
+        socket.emit("playerConnected", {socketId: socket.id, username: username})
+
+        window.location.href = "/lobby"
+    }
 }
 
 function sendInput(event) {
     event.preventDefault()
-    var userInput = {idx: index, promptData: document.getElementById("prompt-text").value}
-    if(userInput){
-    // Send input to the server
-    socket.emit("sendInput", userInput)
 
-    // Clear the input field
-    document.getElementById("prompt-text").value = ""
-    
-    var waitScreen = document.getElementById("wait-screen")
-    waitScreen.style.display = "flex"
-    // window.location.href = "/draw"
+    if (document.getElementById("prompt-text").value == "") {
+        alert("Please enter a prompt")
+    } else {
+        var userInput = {idx: index, promptData: document.getElementById("prompt-text").value}
+        if(userInput){
+        // Send input to the server
+        socket.emit("sendInput", userInput)
+
+        // Clear the input field
+        document.getElementById("prompt-text").value = ""
+        
+        var waitScreen = document.getElementById("wait-screen")
+        waitScreen.style.display = "flex"
+        // window.location.href = "/draw"
+        }
     }
 }
 
@@ -251,7 +293,10 @@ socket.on("receiveInput", (data) => {
 })
 
 socket.on("receiveIndex", (data) => {
-    if (data.socketId == playerSocketId) {    
+    console.log("Index: ", data.idx)
+    console.log("Id: ", localStorage.getItem("socketId"))
+    
+    if (data.socketId == localStorage.getItem("socketId")) {    
         index = data.idx
     }
 })
@@ -264,10 +309,20 @@ socket.on("updatePlayers", (data) => {
 
 socket.on("nextScreen", (data) => {
     if(data == "prompt") {
+        if (window.location.pathname == "/" || window.location.pathname == "/lobby") {
+            return
+        }
         switchToPrompt()
     } else if (data == "draw") {
         switchToDraw()
     } else if(data == "lobby"){
+        if (window.location.pathname == "/lobby") {
+            localStorage.setItem("socketId", playerSocketId)
+            socket.emit("playerConnected", {socketId: playerSocketId, username: username})
+            trackPlayer()
+            console.log("Player waiting in lobby:", username," ", playerSocketId, " ", index)
+        }
+
         switchBackToLobby()
     } else {
         switchToEndGameScreen()
@@ -284,7 +339,7 @@ socket.on("endGame", (data) => {
 
 function endGame() {
     console.log("== Game Over")
-    //localStorage.removeItem("socketId")
+    localStorage.removeItem("socketId")
     localStorage.removeItem("username")
     //socket.emit("endGame", {socketId: playerSocketId})
 }

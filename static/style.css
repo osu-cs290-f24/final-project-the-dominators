@@ -216,7 +216,7 @@ input::placeholder {
     margin: auto;
 }
 
-.prompt-draw h1, .prompt-draw p {
+.prompt-draw h1 {
     text-align: center; 
     background-color: rgba(0, 0, 0, .2);
     backdrop-filter: blur(3px);
@@ -232,9 +232,32 @@ input::placeholder {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
-.prompt-draw p {
+.right-section {
     margin: 20px;
     width: 200px;
+    background-color: rgba(0, 0, 0, .2);
+    backdrop-filter: blur(3px);
+    border-style: solid;
+    border-color: rgba(0, 0, 0, .4);
+    border-width: 4px;
+    border-radius: 10px;
+    padding: 15px;
+    text-wrap: wrap;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prompt-draw p {
+    width: 140px;
+    margin: 10px;
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: none;
+    border-style: none;
+    box-shadow: none;
+    font-size: x-large;
+    text-align: center;
 }
 
 .drawing-element-container {
@@ -248,6 +271,7 @@ input::placeholder {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 }
 
 .drawing-tools {
@@ -280,6 +304,11 @@ input::placeholder {
     font-size: larger;
 }
 
+.select-colors button:hover {
+    border-width: 4px;
+    cursor: pointer;
+}
+
 .drawing-tools button:hover {
     border-width: 4px;
     cursor: pointer;
@@ -301,9 +330,15 @@ input::placeholder {
 .select-colors button {
     border-radius: 100%;
     border-width: 0px;
-    width: 40px;
-    height: 40px;
-    margin: 20px;
+    width: 45px;
+    height: 45px;
+    margin-top: 22px;
+    margin-bottom: 22px;
+    margin-left: 18px;
+    margin-right: 18px;
+    border-color: rgba(0, 0, 0, .4);
+    border-style: solid;
+    font-size: larger;
 }
 
 .select-pen {
@@ -344,20 +379,36 @@ input::placeholder {
     background-color: black;
 }
 
+.select-gray {
+    background-color: rgb(80, 80, 80);
+}
+
+.select-brown {
+    background-color: rgb(99, 48, 13);
+}
+
 .select-red {
-    background-color: red;
+    background-color: rgb(242, 34, 14);
+}
+
+.select-orange {
+    background-color: rgb(241, 142, 2);
 }
 
 .select-blue {
-    background-color: blue;
+    background-color: rgb(4, 66, 245);
+}
+
+.select-purple {
+    background-color: rgb(129, 0, 166);
 }
 
 .select-green {
-    background-color: green;
+    background-color: rgb(99, 167, 46);
 }
 
 .select-yellow {
-    background-color: yellow;
+    background-color: rgb(244, 242, 39);
 }
 
 .canvas-element {
@@ -392,6 +443,7 @@ canvas:hover {
     width: 85%;
     height: 70px;
     margin: 0px;
+    margin-bottom: 20px;
     border-style: solid;
     border-width: 4px;
     border-radius: 10px;
