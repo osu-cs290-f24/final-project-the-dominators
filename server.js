@@ -69,23 +69,33 @@ app.get("/results/:index", function (req, res) {
     var next
     console.log(idx)
 
-    var currIDX = idx
+    //initializes the first playerIDX to be the current idx 
+    var playerIDX = idx
 
     for (var i = 1; i < players.length; i++) {
-        if (i % 2 == 0) {
 
-            currIDX = ((idx + (2 * parseInt(i/2))) % players.length) + (players.length * parseInt(i/2))
+        //find the previous player's index
+        playerIDX = (playerIDX - 1 + players.length) % players.length
 
-            var resultCard = {
-                prompt: promptData[currIDX], 
-                imgURL: "", 
-                username: players[currIDX % players.length].username
-            }
+        //figures out how muany times to add the players.length
+        var roundNum = parseInt(i/2)
 
-        } else {
+        var valIDX = playerIDX + (roundNum * players.length)
+
+        //if its i is odd, display a drawing 
+        if (i % 2 != 0) {
+
             var resultCard = {prompt: "", 
-                imgURL: canvasData[currIDX + 1], 
-                username: players[(currIDX + 1) % players.length].username}
+                imgURL: canvasData[valIDX], 
+                username: players[playerIDX].username
+            }
+        //if i is even, display a prompt
+        } else {
+            var resultCard = {
+                prompt: promptData[valIDX], 
+                imgURL: "", 
+                username: players[playerIDX].username
+            }
         }
 
         tempArr[i-1] = resultCard
