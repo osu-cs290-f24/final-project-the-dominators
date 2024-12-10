@@ -69,11 +69,23 @@ app.get("/results/:index", function (req, res) {
     var next
     console.log(idx)
 
+    var currIDX = idx
+
     for (var i = 1; i < players.length; i++) {
         if (i % 2 == 0) {
-            var resultCard = {prompt: promptData[(((idx + players.length - 2) % players.length) + (((i) / 2) * players.length))], imgURL: "", username: players[(idx + i) % players.length].username}
+
+            currIDX = ((idx + 2) % players.length) + (players.length * parseInt(i/2))
+
+            var resultCard = {
+                prompt: promptData[currIDX], 
+                imgURL: "", 
+                username: players[currIDX % players.length].username
+            }
+
         } else {
-            var resultCard = {prompt: "", imgURL: canvasData[(((idx + players.length - 1) % players.length) + (((i - 1) / 2) * players.length))], username: players[(idx + i) % players.length].username}
+            var resultCard = {prompt: "", 
+                imgURL: canvasData[currIDX + 1], 
+                username: players[(currIDX + 1) % players.length].username}
         }
 
         tempArr[i-1] = resultCard
