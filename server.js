@@ -74,7 +74,7 @@ app.get("/results/:index", function (req, res) {
     for (var i = 1; i < players.length; i++) {
         if (i % 2 == 0) {
 
-            currIDX = ((idx + 2) % players.length) + (players.length * parseInt(i/2))
+            currIDX = ((idx + (2 * parseInt(i/2))) % players.length) + (players.length * parseInt(i/2))
 
             var resultCard = {
                 prompt: promptData[currIDX], 
