@@ -20,7 +20,7 @@
 | Name | Role |
 |------|------|
 | **Ethan Harter** | Developer |
-| **Sam Wilard** | Developer |
+| **Sam Willard** | Developer |
 | **Rose Farrens** | Developer |
 
 ---
